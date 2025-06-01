@@ -42,47 +42,61 @@ public class toDo{
      * Adds a task.
      * @param task The task to add.
      */
-    public void add(String task, Double priority){
+    protected void add(String task, Double priority){
         this.toDoList.put(priority, task);
     }
 
     /**
      * Allows the user to add a task.
      */
-    public void addTask(){
+    public void addTask(Scanner scan){
         System.out.println("Enter the name of the task you want to add");
-        Scanner scan = new Scanner(System.in);
         String nex = scan.nextLine();
         System.out.println("Enter the priority of the task.");
-        Double nexDo = scan.nextDouble();
-        scan.close();
-        this.add(nex, nexDo);
+        try{
+            Double nexDo = Double.valueOf(scan.nextLine());
+            boolean con = this.toDoList.containsKey(nexDo);
+            if(con==true){
+                while(con == true){
+                    nexDo = nexDo + .1;
+                    con = this.toDoList.containsKey(nexDo);
+                }
+            }
+            this.add(nex, nexDo);
+        } catch(NumberFormatException e){
+            System.out.println("Please enter an integer or double.");
+            return;
+        }
+
     }
 
     /**
      * Allows the user to edit the priority of an existing task.
      */
-    public void editPriority(){
+    public void editPriority(Scanner scan){
         System.out.println("What is the current priority of the task you want to update?");
-        Scanner scan = new Scanner(System.in);
-        Double oldPrio = scan.nextDouble();
-        if(this.toDoList.containsKey(oldPrio)==false){
-            System.out.println("A task with that priority was not found.");
-            scan.close();
+        try{
+            Double oldPrio = Double.valueOf(scan.nextLine());
+            if(this.toDoList.containsKey(oldPrio)==false){
+                System.out.println("A task with that priority was not found.");
+                return;
+            }
+            String task = this.toDoList.get(oldPrio);
+            System.out.println("What is the new priority of the task you want to update?");
+            double prio = Double.valueOf(scan.nextLine());
+            boolean con = this.toDoList.containsKey(prio);
+            if(con==true){
+                while(con == true){
+                    prio = prio + .1;
+                    con = this.toDoList.containsKey(prio);
+                }
+            }
+            this.toDoList.remove(oldPrio);
+            this.add(task, prio);
+        } catch(NumberFormatException e){
+            System.out.println("Please enter an integer or double.");
             return;
         }
-        String task = this.toDoList.get(oldPrio);
-        System.out.println("What is the new priority of the task you want to update?");
-        double prio = scan.nextDouble();
-        scan.close();
-        boolean con = this.toDoList.containsKey(prio);
-        if(con==true){
-            while(con == true){
-                prio = prio + .1;
-            }
-        }
-        this.toDoList.remove(oldPrio);
-        this.add(task, prio);
     }
 
     /**
@@ -100,7 +114,7 @@ public class toDo{
      * @param key The priority of the task to remove.
      * @return The value of the removed task.
      */
-    public String remove(double key){
+    protected String remove(double key){
         String task = this.toDoList.get(key);
         this.toDoList.remove(key);
         return task;
@@ -109,35 +123,41 @@ public class toDo{
     /**
      * Allows the user to remove a task.
      */
-    public void removeTask(){
+    public void removeTask(Scanner scan){
         System.out.println("Enter the priority of the task you want to remove.");
-        Scanner scan = new Scanner(System.in);
-        double key = scan.nextDouble();
-        scan.close();
-        if(this.toDoList.containsKey(key)==false){
-            System.out.println("A task with that priority was not found.");
+        try{
+            double key = Double.valueOf(scan.nextLine());
+            if(this.toDoList.containsKey(key)==false){
+                System.out.println("A task with that priority was not found.");
+                return;
+            }
+            this.remove(key);
+        } catch(NumberFormatException e){
+            System.out.println("Please enter an integer or double.");
             return;
         }
-        this.remove(key);
     }
 
     /**
      * Allows a user to complete a task.
      * @return The completed task.
      */
-    public String complete(){
+    public String complete(Scanner scan){
         System.out.println("Enter the priority of the completed task");
-        Scanner scan = new Scanner(System.in);
-        double key = scan.nextDouble();
-        scan.close();
-        if(this.toDoList.containsKey(key)==false){
-            System.out.println("A task with that priority was not found.");
-            scan.close();
+        try{
+            double key = Double.valueOf(scan.nextLine());
+            if(this.toDoList.containsKey(key)==false){
+                System.out.println("A task with that priority was not found.");
+                return null;
+            }
+            String task = this.toDoList.get(key);
+            this.completedTasks.add("x - " + task);
+            return this.remove(key);
+        } catch(NumberFormatException e){
+            System.out.println("Please enter an integer or double.");
             return null;
         }
-        String task = this.toDoList.get(key);
-        this.completedTasks.add("x " + task);
-        return this.remove(key);
+
     }
 
     /**
@@ -148,32 +168,74 @@ public class toDo{
         return this.completedTasks;
     }
 
+    public void edit(Scanner scan){
+        System.out.println("Would you like to (1) Edit a priority or (2) Edit a task?");
+        try{
+            int resp = Integer.valueOf(scan.nextLine());
+            if(resp == 1){
+                this.editPriority(scan);
+            } else if(resp == 2){
+                this.editTask(scan);
+            } else{
+                System.out.println("I can't handle the value " + resp + ". Please enter 1 or 2.");
+            } 
+        } catch(NumberFormatException e){
+            System.out.println("Please enter an integer 1 or 2.");
+            return;
+        }
+        
+    }
+    
+    public void editTask(Scanner scan){
+        System.out.println("What is the priority of the task you want to edit?");
+        try{
+            double key = Double.valueOf(scan.nextLine());
+            if(this.toDoList.containsKey(key)==false){
+                System.out.println("A task with that priority was not found.");
+                return;
+            }
+            System.out.println("What is the new title of the task?");
+            String task = scan.nextLine();
+            this.toDoList.replace(key, task);
+        } catch(NumberFormatException e){
+            System.out.println("Please enter an integer or double.");
+            return;
+        }
+    }
+
     /**
      * Allows users to select the action to take.
      */
-    public void start(){
-        Scanner response = new Scanner(System.in);
-        int input = 0;
-        while(input!=4){
+    public void start(Scanner response){
+        String input = "Y";
+        while(input.equals("Z") == false){
             System.out.println("Commands: ");
-            System.out.println("1. Add");
-            System.out.println("2. List");
-            System.out.println("3. Remove");
-            System.out.println("4. Quit");
-            input = response.nextInt();
-             if(input == 1) {
-                addTask();
-            } else if(input == 2) {
-                print();
-            } else if(input == 3) {
-                removeTask();
-            } 
+            System.out.println("A. Add");
+            System.out.println("B. List");
+            System.out.println("C. Remove");
+            System.out.println("D. Edit");
+            System.out.println("E. Complete");
+            System.out.println("Z. Quit");
+            input = response.nextLine();
+            
+             if(input.equals("A")) {
+                this.addTask(response);
+            } else if(input.equals("B")) {
+                this.print();
+            } else if(input.equals("C")) {
+                this.removeTask(response);
+            } else if(input.equals("D")){
+                this.edit(response);
+            } else if(input.equals("E")){
+                this.complete(response);
+            } else if(input.equals("Z")){
+                break;
+            }
             else{
-                System.out.println("Sorry, don't know how to handle the number " + input);
+                System.out.println("I can't handle the character " + input + ". Please enter a character A through E or Z.");
                 continue;
             }
         }
-        response.close();
         return;
     }
 
@@ -181,10 +243,10 @@ public class toDo{
      * Adds the todo list to a file. Inspired by SenorSeniorDevSr on Reddit.
      */
     public void writeToFile() {
-        try(PrintStream fileOut = new PrintStream(new File("data.txt"))) {
+        try(PrintStream fileOut = new PrintStream(new File("todo.txt"))) {
             for(double keys : this.getTasks().keySet()) {     
                 String task = this.toDoList.get(keys);
-                fileOut.println(keys + "\t" + task);
+                fileOut.println(keys + " - " + task);
             }
             for(String comps : this.getCompletedTasks()){
                 fileOut.println(comps);
@@ -204,22 +266,33 @@ public class toDo{
         toDo newTodoList = new toDo();
         try(Scanner sc = new Scanner(new File("todo.txt"))) {
             while(sc.hasNext()) {
-                String[] array = sc.nextLine().split("\t");
-                double key = Double.valueOf(array[0]);
-                newTodoList.add(array[1], key);
+                String[] array = sc.nextLine().split(" - ");
+                if(array[0].contains("x")){
+                    newTodoList.getCompletedTasks().add(array[0] + " - " + array[1]);
+                    continue;
+                }
+                else{
+                    double key = Double.valueOf(array[0]);
+                    newTodoList.add(array[1], key);  
+                }
+                
             }
+            sc.close();
         }
         catch(FileNotFoundException e){
             System.out.println("File not found. Please enter a valid file name.");
             System.exit(1);
         }
         this.toDoList = newTodoList.toDoList;
+        this.completedTasks = newTodoList.completedTasks;
     }
 
     public static void main(String[] inputs){
+        Scanner scanner = new Scanner(System.in);
         toDo todo = new toDo();
         todo.readFromFile();
-        todo.start();
+        todo.start(scanner);
+        scanner.close();
         todo.writeToFile();
     }
 
