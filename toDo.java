@@ -1,8 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -200,6 +198,9 @@ public class toDo{
         
     }
     
+    /**
+     * Allows the user to edit the content of a task.
+     */
     public void editTask(Scanner scan){
         System.out.println("What is the priority of the task you want to edit?");
         try{
@@ -302,6 +303,9 @@ public class toDo{
         this.completedTasks = newTodoList.completedTasks;
     }
 
+    /**
+     * Main method
+     */
     public static void main(String[] inputs){
         Scanner scanner = new Scanner(System.in);
         toDo todo = new toDo();
