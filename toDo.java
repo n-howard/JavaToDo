@@ -103,10 +103,12 @@ public class toDo{
      * Prints out all of the tasks with their priority.
      */
     public void print(){
+        System.out.println("Tasks:");
         for(double key : this.toDoList.keySet()){
             String val = this.toDoList.get(key);
             System.out.println(key + ". " + val);
         }
+        System.out.println();
     }
 
     /**
@@ -209,6 +211,7 @@ public class toDo{
     public void start(Scanner response){
         String input = "Y";
         while(input.equals("Z") == false){
+            System.out.println();
             System.out.println("Commands: ");
             System.out.println("A. Add");
             System.out.println("B. List");
@@ -217,7 +220,7 @@ public class toDo{
             System.out.println("E. Complete");
             System.out.println("Z. Quit");
             input = response.nextLine();
-            
+            System.out.println();
              if(input.equals("A")) {
                 this.addTask(response);
             } else if(input.equals("B")) {
