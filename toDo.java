@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -56,13 +57,24 @@ public class toDo{
         try{
             Double nexDo = Double.valueOf(scan.nextLine());
             boolean con = this.toDoList.containsKey(nexDo);
-            if(con==true){
+            if(con==false){
+                this.add(nex, nexDo);
+            } else{
+                int n = 0;
                 while(con == true){
-                    nexDo = nexDo + .1;
-                    con = this.toDoList.containsKey(nexDo);
+                    n++;
+                    String nStr = "0." + n;
+                    Double nDo = Double.valueOf(nStr);
+                    con = this.toDoList.containsKey(nexDo + nDo);
                 }
+                if(con == false){
+                    String nStr = "0." + n;
+                    Double nDo = Double.valueOf(nStr);
+                    this.add(nex, nexDo + nDo);
+                }
+
             }
-            this.add(nex, nexDo);
+            
         } catch(NumberFormatException e){
             System.out.println("Please enter an integer or double.");
             return;
