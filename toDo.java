@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.util.TreeMap;
 
 /**
- * A public class that creates a ToDo List in the terminal/
+ * A public class that creates a ToDo List in the terminal.
  * 
  * @author Nat
  */

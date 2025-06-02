@@ -1,8 +1,9 @@
 1.0 - Send transcript to pembroke
 1.1 - apply to edinburgh
-1.2 - Tell your mom she is awesome!
 1.3 - apply for internships
 1.4 - find out if I can invoice for tech advisor meetings
+4.0 - make to do list no longer case sensitive
 5.0 - build portfolio in react
 x - build4good announcement
 x - build4good work update
+x - Tell your mom she is awesome!
